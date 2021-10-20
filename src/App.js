@@ -6,6 +6,8 @@ import Suggestion from './Components/suggestion';
 import { useEffect, useState } from 'react';
 
 function App() {
+  const [binanceExchangeLogo, setbinanceExchangeLogo] = useState();
+  const [coinbaseExchangeLogo, setCoinbaseExchangeLogo] = useState();
   const [binanceBitcoin, setBinanceBitcoin] = useState();
   const [binanceEthereum, setBinanceEthereum] = useState();
   const [coinbaseBitcoin, setCoinbaseBitcoin] = useState();
@@ -18,6 +20,7 @@ function App() {
     fetch('https://api.coingecko.com/api/v3/exchanges/binance').then((responseData) => {
       return responseData.json();
     }).then((data) => {
+      setbinanceExchangeLogo(data['image']);
       const binBTC = data['tickers'].find((element) => {
         if (element['base'] === 'BTC') {
           return true;
@@ -41,6 +44,7 @@ function App() {
     fetch('https://api.coingecko.com/api/v3/exchanges/gdax').then((responseData) => {
       return responseData.json();
     }).then((data) => {
+      setCoinbaseExchangeLogo(data['image']);
       const cbBTC = data['tickers'].find((element) => {
         if (element['base'] === 'BTC') {
           return true;
@@ -65,20 +69,20 @@ function App() {
       } else {
         setBTCSuggestion("Binance");
       }
-      if (binanceEthereum > coinbaseEthereum) {
+      if (binanceEthereum.last > coinbaseEthereum.last) {
         setETHSuggestion("Coinbase Exchange");
       } else {
         setETHSuggestion("Binance");
       }
     }
 
-  }, [binanceBitcoin, binanceEthereum, coinbaseBitcoin, coinbaseEthereum]);
+  }, []);
   return (
     <>
       <Layout>
         <div className="pt-3">
           <TopHeading />
-          {(binanceBitcoin && binanceEthereum && coinbaseBitcoin && coinbaseEthereum) ? <RateIndicator binanceBTC={binanceBitcoin} binanceETH={binanceEthereum} coinbaseBTC={coinbaseBitcoin} coinbaseETH={coinbaseEthereum} /> : <h3 className="text-white text-center">Loading Data...!!!</h3>}
+          {(binanceBitcoin && binanceEthereum && coinbaseBitcoin && coinbaseEthereum) ? <RateIndicator coinbaseExchangeLogo={coinbaseExchangeLogo} binanceExchangeLogo={binanceExchangeLogo} binanceBTC={binanceBitcoin} binanceETH={binanceEthereum} coinbaseBTC={coinbaseBitcoin} coinbaseETH={coinbaseEthereum} /> : <h3 className="text-white text-center">Loading Data...!!!</h3>}
           {(BTCSuggestion && ETHSuggestion) ? <Suggestion BTCSuggestion={BTCSuggestion} ETHSuggestion={ETHSuggestion} /> : <h3 className="text-white text-center">Loading Data...!!!</h3>}
         </div>
       </Layout>

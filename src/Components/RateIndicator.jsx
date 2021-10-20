@@ -6,11 +6,21 @@ const RateIndicator = (props) => {
       {props.binanceBTC &&
       props.binanceETH &&
       props.coinbaseBTC &&
-      props.coinbaseETH ? (
+      props.coinbaseETH &&
+      props.binanceExchangeLogo &&
+      props.coinbaseExchangeLogo ? (
         <div className="row text-white d-flex justify-content-center">
           <div className="col-md-6 text-center p-2">
             <div className="exchangeHeading w-75">
               {props.binanceBTC.market.name}
+              <span>
+                &nbsp;
+                <img
+                  src={props.binanceExchangeLogo}
+                  ALT="EXCHANGE LOGO"
+                  width="50"
+                />
+              </span>
             </div>
             <br />
             <div className="exchangeHeadingInner w-sm-25 mt-5">
@@ -26,6 +36,14 @@ const RateIndicator = (props) => {
           <div className="col-md-6 text-center p-2">
             <div className="exchangeHeading w-75">
               {props.coinbaseBTC.market.name}
+              <span>
+                &nbsp;
+                <img
+                  src={props.coinbaseExchangeLogo}
+                  ALT="EXCHANGE LOGO"
+                  width="50"
+                />
+              </span>
             </div>
             <br />
             <div className="exchangeHeadingInner w-sm-25 mt-5">
