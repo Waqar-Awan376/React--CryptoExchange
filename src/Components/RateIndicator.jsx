@@ -17,7 +17,7 @@ const RateIndicator = (props) => {
                 &nbsp;
                 <img
                   src={props.binanceExchangeLogo}
-                  ALT="EXCHANGE LOGO"
+                  alt="EXCHANGE LOGO"
                   width="50"
                 />
               </span>
@@ -40,7 +40,7 @@ const RateIndicator = (props) => {
                 &nbsp;
                 <img
                   src={props.coinbaseExchangeLogo}
-                  ALT="EXCHANGE LOGO"
+                  alt="EXCHANGE LOGO"
                   width="50"
                 />
               </span>

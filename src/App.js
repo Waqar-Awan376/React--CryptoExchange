@@ -14,69 +14,76 @@ function App() {
   const [coinbaseEthereum, setCoinbaseEthereum] = useState();
   const [BTCSuggestion, setBTCSuggestion] = useState();
   const [ETHSuggestion, setETHSuggestion] = useState();
-  const [allowedToRender, setAllowedToRender] = useState(false);
 
   useEffect(() => {
-    fetch('https://api.coingecko.com/api/v3/exchanges/binance').then((responseData) => {
-      return responseData.json();
-    }).then((data) => {
-      setbinanceExchangeLogo(data['image']);
-      const binBTC = data['tickers'].find((element) => {
-        if (element['base'] === 'BTC') {
-          return true;
-        }
-      });
-      setBinanceBitcoin(binBTC)
-    }).catch(err => console.log());
+    const reqHandler = setTimeout(() => {
+      fetch('https://api.coingecko.com/api/v3/exchanges/binance').then((responseData) => {
+        return responseData.json();
+      }).then((data) => {
+        setbinanceExchangeLogo(data['image']);
+        const binBTC = data['tickers'].find((element) => {
+          if (element['base'] === 'BTC') {
+            return true;
+          }
+          return false;
+        });
+        setBinanceBitcoin(binBTC)
+      }).catch(err => console.log());
 
-    fetch('https://api.coingecko.com/api/v3/exchanges/binance').then((responseData) => {
-      return responseData.json();
-    }).then((data) => {
-      const binBTC = data['tickers'].find((element) => {
-        if (element['base'] === 'ETH') {
-          return true;
-        }
-      });
-      setBinanceEthereum(binBTC)
-    }).catch(err => console.log());
+      fetch('https://api.coingecko.com/api/v3/exchanges/binance').then((responseData) => {
+        return responseData.json();
+      }).then((data) => {
+        const binBTC = data['tickers'].find((element) => {
+          if (element['base'] === 'ETH') {
+            return true;
+          }
+          return false;
+        });
+        setBinanceEthereum(binBTC)
+      }).catch(err => console.log());
 
 
-    fetch('https://api.coingecko.com/api/v3/exchanges/gdax').then((responseData) => {
-      return responseData.json();
-    }).then((data) => {
-      setCoinbaseExchangeLogo(data['image']);
-      const cbBTC = data['tickers'].find((element) => {
-        if (element['base'] === 'BTC') {
-          return true;
-        }
-      });
-      setCoinbaseBitcoin(cbBTC)
-    }).catch(err => console.log());
+      fetch('https://api.coingecko.com/api/v3/exchanges/gdax').then((responseData) => {
+        return responseData.json();
+      }).then((data) => {
+        setCoinbaseExchangeLogo(data['image']);
+        const cbBTC = data['tickers'].find((element) => {
+          if (element['base'] === 'BTC') {
+            return true;
+          }
+          return false;
+        });
+        setCoinbaseBitcoin(cbBTC)
+      }).catch(err => console.log());
 
-    fetch('https://api.coingecko.com/api/v3/exchanges/gdax').then((responseData) => {
-      return responseData.json();
-    }).then((data) => {
-      const cbETH = data['tickers'].find((element) => {
-        if (element['base'] === 'ETH') {
-          return true;
+      fetch('https://api.coingecko.com/api/v3/exchanges/gdax').then((responseData) => {
+        return responseData.json();
+      }).then((data) => {
+        const cbETH = data['tickers'].find((element) => {
+          if (element['base'] === 'ETH') {
+            return true;
+          }
+          return false;
+        });
+        setCoinbaseEthereum(cbETH);
+      }).catch(err => console.log(err));
+      if (binanceBitcoin && binanceEthereum && coinbaseBitcoin && coinbaseEthereum) {
+        if (binanceBitcoin.last > coinbaseBitcoin.last) {
+          setBTCSuggestion("Coinbase Exchange");
+        } else {
+          setBTCSuggestion("Binance");
         }
-      });
-      setCoinbaseEthereum(cbETH);
-    }).catch(err => console.log(err));
-    if (binanceBitcoin && binanceEthereum && coinbaseBitcoin && coinbaseEthereum) {
-      if (binanceBitcoin.last > coinbaseBitcoin.last) {
-        setBTCSuggestion("Coinbase Exchange");
-      } else {
-        setBTCSuggestion("Binance");
+        if (binanceEthereum.last > coinbaseEthereum.last) {
+          setETHSuggestion("Coinbase Exchange");
+        } else {
+          setETHSuggestion("Binance");
+        }
       }
-      if (binanceEthereum.last > coinbaseEthereum.last) {
-        setETHSuggestion("Coinbase Exchange");
-      } else {
-        setETHSuggestion("Binance");
-      }
+    }, 5000);
+    return () => {
+      clearTimeout(reqHandler);
     }
-
-  }, []);
+  }, [binanceBitcoin, binanceEthereum, coinbaseBitcoin, coinbaseEthereum]);
   return (
     <>
       <Layout>
